@@ -6,4 +6,7 @@ exports.fetchCategories = () => {
         .then((result) => {
             return result.rows
         })
+        .catch((error) => {
+            return error
+        })
 }
