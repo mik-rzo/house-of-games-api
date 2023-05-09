@@ -30,5 +30,13 @@ describe('/api/categories', () => {
                     })
                 });
         });
+        test('status 404 - misspelled endpoint', () => {
+            return request(app)
+                .get('/api/catagories')
+                .expect(404)
+                .then((response) => {
+                    expect(response.body.message).toBe('Error 404: Not found.')
+                })
+        });
     });
 });
