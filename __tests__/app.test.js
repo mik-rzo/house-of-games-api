@@ -25,6 +25,15 @@ describe('/api', () => {
                     expect(getAPI).toMatchObject({
                         description: expect.any(String)
                     });
+
+                    const getCategories = response.body["GET /api/categories"];
+                    expect(getCategories).toMatchObject({
+                        description: expect.any(String),
+                        queries: [],
+                        exampleResponse: expect.objectContaining({
+                            categories: expect.any(Array)
+                        })
+                    });
                 });
         });
     });
