@@ -29,3 +29,32 @@ describe('/api', () => {
         });
     });
 });
+
+describe('/api/categories', () => {
+    describe('GET request', () => {
+        test('status 200 - responds with array of category objects with the following properties: slug, description', () => {
+            return request(app)
+                .get('/api/categories')
+                .expect(200)
+                .then((response) => {
+                    const { categories } = response.body;
+                    expect(categories.length).toBe(4);
+                    categories.forEach((category) => {
+                        expect(category).toMatchObject({
+                            slug: expect.any(String),
+                            description: expect.any(String)
+                        });
+                    })
+                });
+        });
+        test('status 404 - misspelled endpoint', () => {
+            return request(app)
+                .get('/api/catagories')
+                .expect(404)
+                .then((response) => {
+                    expect(response.body.message).toBe('Error 404: Not found.')
+                })
+        });
+    });
+});
+
