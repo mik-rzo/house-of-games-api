@@ -14,8 +14,21 @@ afterAll(() => {
     return db.end();
 });
 
-describe('', () => {
-    test('', () => {
-
+describe('/api/categories', () => {
+    describe('GET request', () => {
+        test('status 200 - responds with array of category objects with the following properties: slug, description', () => {
+            return request(app)
+                .get('/api/categories')
+                .expect(200)
+                .then((response) => {
+                    const { categories } = response.body;
+                    categories.forEach((category) => {
+                        expect(category).toMatchObject({
+                            slug: expect.any(String),
+                            description: expect.any(String)
+                        });
+                    })
+                });
+        });
     });
 });
