@@ -14,8 +14,18 @@ afterAll(() => {
     return db.end();
 });
 
-describe('', () => {
-    test('', () => {
-
+describe('/api', () => {
+    describe('GET request', () => {
+        test('status 200 - respond with JSON describing all available endpoints on the API', () => {
+            return request(app)
+                .get('/api')
+                .expect(200)
+                .then((response) => {
+                    const getAPI = response.body["GET /api"];
+                    expect(getAPI).toMatchObject({
+                        description: expect.any(String)
+                    });
+                });
+        });
     });
 });
