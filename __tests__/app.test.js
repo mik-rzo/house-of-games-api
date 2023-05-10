@@ -6,6 +6,8 @@ const seed = require('../db/seeds/seed.js');
 
 const db = require('../db/connection.js');
 
+const endpoints = require('../endpoints.json');
+
 beforeEach(() => {
     return seed(testData);
 });
@@ -21,19 +23,7 @@ describe('/api', () => {
                 .get('/api')
                 .expect(200)
                 .then((response) => {
-                    const getAPI = response.body["GET /api"];
-                    expect(getAPI).toMatchObject({
-                        description: expect.any(String)
-                    });
-
-                    const getCategories = response.body["GET /api/categories"];
-                    expect(getCategories).toMatchObject({
-                        description: expect.any(String),
-                        queries: [],
-                        exampleResponse: expect.objectContaining({
-                            categories: expect.any(Array)
-                        })
-                    });
+                    expect(response.body).toEqual(endpoints);
                 });
         });
     });
