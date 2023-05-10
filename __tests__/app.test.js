@@ -58,6 +58,38 @@ describe('/api/categories', () => {
 });
 
 describe('/api/reviews', () => {
+    describe('GET request', () => {
+        test('status 200 - respond with array of review objects containing the following properties sorted by date in descending order: owner, title, review_id, category, review_img_url, created_at, votes, designer, comment_count, NOT review_body', () => {
+            return request(app)
+                .get('/api/reviews')
+                .expect(200)
+                .then((response) => {
+                    const { reviews } = response.body;
+                    expect(reviews.length).toBe(13);
+                    reviews.forEach((review) => {
+                        expect(review).toMatchObject({
+                            title: expect.any(String),
+                            designer: expect.any(String),
+                            owner: expect.any(String),
+                            review_img_url: expect.any(String),
+                            category: expect.any(String),
+                            created_at: expect.any(String),
+                            votes: expect.any(Number),
+                            comment_count: expect.any(Number)
+                        });
+                    });
+                    expect(reviews).toBeSortedBy('created_at', { descending: true });
+                });
+        });
+        test('status 404 - misspelled endpoint', () => {
+            return request(app)
+                .get('/api/review')
+                .expect(404)
+                .then((response) => {
+                    expect(response.body.message).toBe('Error 404: Not found.')
+                })
+        });
+    });
     describe('/:review_id', () => {
         describe('GET request', () => {
             test('status 200 - respond with review object containing the following properties: review_id, title, review_body, designer, review_img_url, votes, category, owner, created_at', () => {
