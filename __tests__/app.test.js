@@ -94,7 +94,7 @@ describe('/api/reviews', () => {
                     });
             });
         });
-        describe.only('/comments', () => {
+        describe('/comments', () => {
             describe('GET request', () => {
                 test('status 200 - respond with array of comments with the following properties sorted by date in descending order: comment_id, votes, created_at, author, body, review_id', () => {
                     return request(app)
