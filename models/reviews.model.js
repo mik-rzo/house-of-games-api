@@ -31,3 +31,20 @@ exports.fetchReviews = () => {
         })
 }
 
+exports.fetchCommentsByReviewId = (review_id) => {
+    const query = `
+    SELECT * FROM comments
+    WHERE review_id = $1
+    ORDER BY created_at DESC;
+    `
+    const { fetchReviewsById } = module.exports;
+    return fetchReviewsById(review_id) // check if review matching review id exists
+        .then(() => {
+            return db.query(query, [review_id])
+        })
+        .then((result) => {
+            return result.rows
+        })
+}
+
+

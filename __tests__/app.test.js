@@ -128,6 +128,55 @@ describe('/api/reviews', () => {
                     });
             });
         });
+        describe('/comments', () => {
+            describe('GET request', () => {
+                test('status 200 - respond with array of comments with the following properties sorted by date in descending order: comment_id, votes, created_at, author, body, review_id', () => {
+                    return request(app)
+                        .get('/api/reviews/2/comments')
+                        .expect(200)
+                        .then((response) => {
+                            const { comments } = response.body;
+                            expect(comments.length).toBe(3);
+                            comments.forEach((comment) => {
+                                expect(comment).toMatchObject({
+                                    comment_id: expect.any(Number),
+                                    votes: expect.any(Number),
+                                    created_at: expect.any(String),
+                                    author: expect.any(String),
+                                    body: expect.any(String),
+                                    review_id: 2
+                                });
+                            });
+                            expect(comments).toBeSortedBy('created_at', { descending: true });
+                        });
+                });
+                test('status 200 - respond with empty array for existing review with no comments', () => {
+                    return request(app)
+                        .get('/api/reviews/6/comments')
+                        .expect(200)
+                        .then((response) => {
+                            const { comments } = response.body;
+                            expect(comments.length).toBe(0)
+                        })
+                });
+                test('status 404 - review id does not exist in the database', () => {
+                    return request(app)
+                        .get('/api/reviews/20/comments')
+                        .expect(404)
+                        .then((response) => {
+                            expect(response.body.message).toBe('Error 404: Not found.')
+                        });
+                });
+                test('status 400 - review id is not a number', () => {
+                    return request(app)
+                        .get('/api/reviews/one')
+                        .expect(400)
+                        .then((response) => {
+                            expect(response.body.message).toBe('Error 400: Bad request.')
+                        });
+                });
+            });
+        });
     });
 });
 
