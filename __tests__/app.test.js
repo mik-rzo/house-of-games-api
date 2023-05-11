@@ -195,6 +195,24 @@ describe('/api/reviews', () => {
                             })
                         });
                 });
+                test('status 201 - ignore extra properties given in request body', () => {
+                    const comment = { username: 'dav3rid', body: 'This game ruins friendships!', votes: 51 };
+                    return request(app)
+                        .post('/api/reviews/11/comments')
+                        .send(comment)
+                        .expect(201)
+                        .then((response) => {
+                            const { comment } = response.body;
+                            expect(comment).toEqual({
+                                comment_id: 7,
+                                body: 'This game ruins friendships!',
+                                review_id: 11,
+                                author: 'dav3rid',
+                                votes: 0,
+                                created_at: expect.any(String)
+                            })
+                        });
+                });
                 test('status 404 - review id does not exist in the database', () => {
                     const comment = { username: 'dav3rid', body: 'This game ruins friendships!' };
                     return request(app)
@@ -223,6 +241,16 @@ describe('/api/reviews', () => {
                         .expect(400)
                         .then((response) => {
                             expect(response.body.message).toBe('Error 400: Bad request.')
+                        });
+                });
+                test('status 404 - username in comment object of request body does not exist', () => {
+                    const comment = { username: 'watling-gh0st', body: 'This game ruins friendships!' };
+                    return request(app)
+                        .post('/api/reviews/2/comments')
+                        .send(comment)
+                        .expect(404)
+                        .then((response) => {
+                            expect(response.body.message).toBe('Error 404: Not found.')
                         });
                 });
             });
