@@ -75,7 +75,8 @@ describe('/api/reviews', () => {
                             category: expect.any(String),
                             created_at: expect.any(String),
                             votes: expect.any(Number),
-                            comment_count: expect.any(Number)
+                            comment_count: expect.any(Number),
+                            review_id: expect.any(Number)
                         });
                         expect(review.hasOwnProperty('review_body')).toBe(false);
                     });
