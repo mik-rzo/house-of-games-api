@@ -176,6 +176,52 @@ describe('/api/reviews', () => {
                         });
                 });
             });
+            describe('POST request', () => {
+                test('status 201 - accept request of comment object with properties: username, body; respond with posted comment object', () => {
+                    const comment = { username: 'dav3rid', body: 'This game ruins friendships!' };
+                    return request(app)
+                        .post('/api/reviews/11/comments')
+                        .send(comment)
+                        .then((response) => {
+                            const { comment } = response.body;
+                            expect(comment).toEqual({
+                                comment_id: 7,
+                                body: 'This game ruins friendships!',
+                                review_id: 11,
+                                author: 'dav3rid',
+                                votes: 0,
+                                created_at: expect.any(String)
+                            })
+                        });
+                });
+                test('status 404 - review id does not exist in the database', () => {
+                    const comment = { username: 'dav3rid', body: 'This game ruins friendships!' };
+                    return request(app)
+                        .post('/api/reviews/15/comments')
+                        .send(comment)
+                        .then((response) => {
+                            expect(response.body.message).toBe('Error 404: Not found.')
+                        });
+                });
+                test('status 400 - review id is not a number', () => {
+                    const comment = { username: 'dav3rid', body: 'This game ruins friendships!' };
+                    return request(app)
+                        .post('/api/reviews/fifteen/comments')
+                        .send(comment)
+                        .then((response) => {
+                            expect(response.body.message).toBe('Error 400: Bad request.')
+                        });
+                });
+                test('status 400 - missing required fields', () => {
+                    const comment = { body: 'This game ruins friendships!' };
+                    return request(app)
+                        .post('/api/reviews/11/comments')
+                        .send(comment)
+                        .then((response) => {
+                            expect(response.body.message).toBe('Error 400: Bad request.')
+                        });
+                });
+            });
         });
     });
 });
