@@ -23,12 +23,12 @@ exports.insertCommentsByReviewId = (review_id, post) => {
     }
     const query = `
     INSERT INTO comments
-    (body, review_id, author, votes, created_at)
+    (body, review_id, author)
     VALUES
-    ($1, $2, $3, $4, $5)
+    ($1, $2, $3)
     RETURNING *;
     `
-    return db.query(query, [post.body, review_id, post.username, 0, new Date().toISOString()])
+    return db.query(query, [post.body, review_id, post.username])
     .then((result) => {
         return result.rows[0]
     })
