@@ -14,9 +14,6 @@ exports.getReviewsById = (request, response, next) => {
 exports.getReviews = (request, response, next) => {
     fetchReviews()
         .then((result) => {
-            result.forEach((review) => {
-                review.comment_count = Number(review.comment_count);
-            })
             response.status(200).send({ reviews: result });
         })
         .catch((error) => {

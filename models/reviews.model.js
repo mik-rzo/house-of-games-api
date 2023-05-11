@@ -24,6 +24,9 @@ exports.fetchReviews = () => {
     `
     return db.query(query)
         .then((result) => {
+            result.rows.forEach((review) => {
+                review.comment_count = Number(review.comment_count);
+            });
             return result.rows
         })
 }
