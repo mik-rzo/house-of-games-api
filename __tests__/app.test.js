@@ -129,7 +129,7 @@ describe('/api/reviews', () => {
             });
         });
         describe('PATCH request', () => {
-            test('status 200 - accept request of object with property: inc_votes; respond with updated review object', () => {
+            test('status 200 - accept request of object with property: inc_votes (positive); respond with updated review object', () => {
                 return request(app)
                     .patch('/api/reviews/12')
                     .send({ inc_votes: 25 })
@@ -145,6 +145,24 @@ describe('/api/reviews', () => {
                         expect(review.review_img_url).toBe('https://images.pexels.com/photos/4200740/pexels-photo-4200740.jpeg?w=700&h=700');
                         expect(review.created_at).toBe('2021-01-22T10:37:04.839Z');
                         expect(review.votes).toBe(125);
+                    });
+            });
+            test('status 200 - accept request of object with property: inc_votes (negative); respond with updated review object', () => {
+                return request(app)
+                    .patch('/api/reviews/12')
+                    .send({ inc_votes: -1 })
+                    .expect(200)
+                    .then((response) => {
+                        const { review } = response.body;
+                        expect(review.review_id).toBe(12);
+                        expect(review.title).toBe('Scythe; you\'re gonna need a bigger table!');
+                        expect(review.category).toBe('social deduction');
+                        expect(review.designer).toBe('Jamey Stegmaier');
+                        expect(review.owner).toBe('mallionaire');
+                        expect(review.review_body).toBe('Spend 30 minutes just setting up all of the boards (!) meeple and decks, just to forget how to play. Scythe can be a lengthy game but really packs a punch if you put the time in. With beautiful artwork, countless scenarios and clever game mechanics, this board game is a must for any board game fanatic; just make sure you explain ALL the rules before you start playing with first timers or you may find they bring it up again and again.');
+                        expect(review.review_img_url).toBe('https://images.pexels.com/photos/4200740/pexels-photo-4200740.jpeg?w=700&h=700');
+                        expect(review.created_at).toBe('2021-01-22T10:37:04.839Z');
+                        expect(review.votes).toBe(99);
                     });
             });
             test('status 200 - ignore extra properties given in request body', () => {
