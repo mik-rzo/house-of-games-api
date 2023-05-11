@@ -66,7 +66,7 @@
     }
   },
   "POST /api/reviews/:review_id/comments": {
-    "description": "accepts a comment object and adds the comment to the database",
+    "description": "accepts a comment object and adds the comment to a review matching review id",
     "queries": [],
     "exampleRequest": {
       "username": "dav3rid",
@@ -80,6 +80,26 @@
         "author": "dav3rid",
         "votes": 0,
         "created_at": "2023-05-11T12:47:09.069Z"
+      }
+    }
+  },
+  "PATCH /api/reviews/:review_id": {
+    "description": "accepts an object containing a number to increment/decerement votes and updates the review matching review id",
+    "queries": [],
+    "exampleRequest": {
+      "inc_votes": 25
+    },
+    "exampleResponse": {
+      "review": {
+        "review_id": 2,
+        "title": "Jenga",
+        "category": "dexterity",
+        "designer": "Leslie Scott",
+        "owner": "philippaclaire9",
+        "review_body": "Fiddly fun for all the family",
+        "review_img_url": "https://images.pexels.com/photos/4473494/pexels-photo-4473494.jpeg?w=700&h=700",
+        "created_at": "2021-01-18T10:01:41.251Z",
+        "votes": 5
       }
     }
   }
