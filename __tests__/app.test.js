@@ -182,6 +182,7 @@ describe('/api/reviews', () => {
                     return request(app)
                         .post('/api/reviews/11/comments')
                         .send(comment)
+                        .expect(201)
                         .then((response) => {
                             const { comment } = response.body;
                             expect(comment).toEqual({
@@ -199,6 +200,7 @@ describe('/api/reviews', () => {
                     return request(app)
                         .post('/api/reviews/15/comments')
                         .send(comment)
+                        .expect(404)
                         .then((response) => {
                             expect(response.body.message).toBe('Error 404: Not found.')
                         });
@@ -208,6 +210,7 @@ describe('/api/reviews', () => {
                     return request(app)
                         .post('/api/reviews/fifteen/comments')
                         .send(comment)
+                        .expect(400)
                         .then((response) => {
                             expect(response.body.message).toBe('Error 400: Bad request.')
                         });
@@ -217,6 +220,7 @@ describe('/api/reviews', () => {
                     return request(app)
                         .post('/api/reviews/11/comments')
                         .send(comment)
+                        .expect(400)
                         .then((response) => {
                             expect(response.body.message).toBe('Error 400: Bad request.')
                         });
