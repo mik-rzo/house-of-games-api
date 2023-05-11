@@ -77,6 +77,7 @@ describe('/api/reviews', () => {
                             votes: expect.any(Number),
                             comment_count: expect.any(Number)
                         });
+                        expect(review.hasOwnProperty('review_body')).toBe(false);
                     });
                     expect(reviews).toBeSortedBy('created_at', { descending: true });
                 });
