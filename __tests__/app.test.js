@@ -59,7 +59,7 @@ describe('/api/categories', () => {
 
 describe('/api/reviews', () => {
     describe('GET request', () => {
-        test('status 200 - respond with array of review objects containing the following properties sorted by date in descending order: owner, title, review_id, category, review_img_url, created_at, votes, designer, comment_count, NOT review_body', () => {
+        test('status 200 - respond with array of review objects containing the following properties (defaults to sort by date descending): owner, title, review_id, category, review_img_url, created_at, votes, designer, comment_count, NOT review_body', () => {
             return request(app)
                 .get('/api/reviews')
                 .expect(200)
@@ -81,6 +81,27 @@ describe('/api/reviews', () => {
                         expect(review.hasOwnProperty('review_body')).toBe(false);
                     });
                     expect(reviews).toBeSortedBy('created_at', { descending: true });
+                });
+        });
+        test('status 200 - accept category query to filter array of reviews', () => {
+            return request(app)
+                .get('/api/reviews?category=social%20deduction')
+                .expect(200)
+                .then((response) => {
+                    const { reviews } = response.body;
+                    expect(reviews.length).toBe(11);
+                    reviews.forEach((review) => {
+                        expect(review.category).toBe('social deduction');
+                    });
+                });
+        });
+        test('status 200 - accept sort by and order query to change order of array', () => {
+            return request(app)
+                .get('/api/reviews?sort_by=designer&order=asc')
+                .expect(200)
+                .then((response) => {
+                    const { reviews } = response.body;
+                    expect(reviews).toBeSortedBy('designer', { descending: false });
                 });
         });
         test('status 404 - misspelled endpoint', () => {
