@@ -2,6 +2,7 @@ const express = require('express');
 const { getCategories } = require('./controllers/categories.controller.js');
 const { getEndpoints } = require('./controllers/endpoints.controller.js');
 const { getReviewsById, getReviews, getCommentsByReviewId, postCommentsByReviewId, patchReviewsByReviewId } = require('./controllers/reviews.controller.js');
+const { deleteCommentsByCommentId, getCommentsByCommentId } = require('./controllers/comments.controller.js');
 const { getUsers } = require('./controllers/users.controller.js');
 
 const app = express();
@@ -21,6 +22,10 @@ app.get('/api/reviews/:review_id/comments', getCommentsByReviewId);
 app.post('/api/reviews/:review_id/comments', postCommentsByReviewId);
 
 app.patch('/api/reviews/:review_id', patchReviewsByReviewId);
+
+app.delete('/api/comments/:comment_id', deleteCommentsByCommentId);
+
+app.get('/api/comments/:comment_id', getCommentsByCommentId);
 
 app.get('/api/users', getUsers);
 

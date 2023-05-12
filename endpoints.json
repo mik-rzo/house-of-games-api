@@ -103,6 +103,9 @@
       }
     }
   },
+  "DELETE /api/comments/:comment_id": {
+    "description": "removes a comment matching comment id"
+  },
   "GET /api/users": {
     "description": "serves an array of all users",
     "queries": [],
