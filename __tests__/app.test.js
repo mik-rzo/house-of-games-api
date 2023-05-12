@@ -350,3 +350,36 @@ describe('/api/reviews', () => {
     });
 });
 
+describe('/api/comments/:comment_id', () => {
+    describe('DELETE request', () => {
+        test('status 204 - comment matching comment id successfully deleted', () => {
+            return request(app)
+                .delete('/api/comments/1')
+                .expect(204)
+                .then(() => {
+                    return request(app)
+                        .get('/api/comments/1')
+                        .expect(404)
+                })
+                .then((response) => {
+                    expect(response.body.message).toBe('Error 404: Not found.')
+                });
+        });
+        test('status 404 - comment id could not be found', () => {
+            return request(app)
+                .delete('/api/comments/10')
+                .expect(404)
+                .then((response) => {
+                    expect(response.body.message).toBe('Error 404: Not found.')
+                });
+        });
+        test('status 400 - comment id is not a number', () => {
+            return request(app)
+                .delete('/api/comments/one')
+                .expect(400)
+                .then((response) => {
+                    expect(response.body.message).toBe('Error 400: Bad request.')
+                });
+        });
+    });
+});
