@@ -3,6 +3,7 @@ const { getCategories } = require('./controllers/categories.controller.js');
 const { getEndpoints } = require('./controllers/endpoints.controller.js');
 const { getReviewsById, getReviews, getCommentsByReviewId, postCommentsByReviewId, patchReviewsByReviewId } = require('./controllers/reviews.controller.js');
 const { deleteCommentsByCommentId, getCommentsByCommentId } = require('./controllers/comments.controller.js');
+const { getUsers } = require('./controllers/users.controller.js');
 
 const app = express();
 
@@ -25,6 +26,8 @@ app.patch('/api/reviews/:review_id', patchReviewsByReviewId);
 app.delete('/api/comments/:comment_id', deleteCommentsByCommentId);
 
 app.get('/api/comments/:comment_id', getCommentsByCommentId);
+
+app.get('/api/users', getUsers);
 
 app.use((request, response, next) => {
     const error = { status: 404, message: 'Error 404: Not found.' };
