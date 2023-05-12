@@ -350,3 +350,32 @@ describe('/api/reviews', () => {
     });
 });
 
+
+describe('/api/users', () => {
+    describe('GET request', () => {
+        test('status 200 - responds with an array of users containing the following properties: username, name, avatar_url', () => {
+            return request(app)
+                .get('/api/users')
+                .expect(200)
+                .then((response) => {
+                    const { users } = response.body;
+                    expect(users.length).toBe(4);
+                    users.forEach((user) => {
+                        expect(user).toMatchObject({
+                            username: expect.any(String),
+                            name: expect.any(String),
+                            avatar_url: expect.any(String)
+                        })
+                    })
+                });
+        });
+        test('status 404 - misspelled endpoint', () => {
+            return request(app)
+                .get('/api/user')
+                .expect(404)
+                .then((response) => {
+                    expect(response.body.message).toBe('Error 404: Not found.')
+                })
+        })
+    });
+});
