@@ -94,7 +94,7 @@ describe('/api/reviews', () => {
     });
     describe('/:review_id', () => {
         describe('GET request', () => {
-            test('status 200 - respond with review object containing the following properties: review_id, title, review_body, designer, review_img_url, votes, category, owner, created_at, comment_count', () => {
+            test('status 200 - respond with review object containing the following properties: review_id, title, review_body, designer, review_img_url, votes, category, owner, created_at', () => {
                 return request(app)
                     .get('/api/reviews/2')
                     .expect(200)
@@ -109,6 +109,14 @@ describe('/api/reviews', () => {
                         expect(review.category).toBe('dexterity');
                         expect(review.owner).toBe('philippaclaire9');
                         expect(review.created_at).toBe('2021-01-18T10:01:41.251Z');
+                    });
+            });
+            test('status 200 - respond with review object containing the property: comment_count', () => {
+                return request(app)
+                    .get('/api/reviews/2')
+                    .expect(200)
+                    .then((response) => {
+                        const { review } = response.body;
                         expect(review.comment_count).toBe(3);
                     });
             });
