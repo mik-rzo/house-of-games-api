@@ -102,5 +102,8 @@
         "votes": 5
       }
     }
+  },
+  "DELETE /api/comments/:comment_id": {
+    "description": "removes a comment matching comment id"
   }
 }

@@ -29,7 +29,36 @@ exports.insertCommentsByReviewId = (review_id, post) => {
     RETURNING *;
     `
     return db.query(query, [post.body, review_id, post.username])
-    .then((result) => {
-        return result.rows[0]
-    })
+        .then((result) => {
+            return result.rows[0]
+        })
+}
+
+exports.deleteRowCommentsByCommentId = (comment_id) => {
+    const query = `
+    DELETE FROM comments
+    WHERE comment_id = $1;
+    `
+    const { fetchCommentsByCommentId } = module.exports; // return this.fetchCommentsByCommentId (alternative syntax)
+    return fetchCommentsByCommentId(comment_id)          //
+        .then(() => {
+            return db.query(query, [comment_id])
+        })
+        .then(() => {
+            return
+        })
+}
+
+exports.fetchCommentsByCommentId = (comment_id) => {
+    const query = `
+    SELECT * FROM comments
+    WHERE comment_id = $1;
+    `
+    return db.query(query, [comment_id])
+        .then((result) => {
+            if (result.rows.length === 0) {
+                return Promise.reject({ status: 404, message: 'Error 404: Not found.' })
+            }
+            return result.rows[0]
+        })
 }
