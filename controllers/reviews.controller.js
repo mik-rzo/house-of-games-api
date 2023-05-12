@@ -13,7 +13,10 @@ exports.getReviewsById = (request, response, next) => {
 }
 
 exports.getReviews = (request, response, next) => {
-    fetchReviews()
+    if (Object.entries(request.query).length === 0) {
+        request.query = undefined;
+    }
+    fetchReviews(request.query)
         .then((result) => {
             response.status(200).send({ reviews: result });
         })
