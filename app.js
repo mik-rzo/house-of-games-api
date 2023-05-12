@@ -9,6 +9,8 @@ const app = express();
 
 app.use(express.json());
 
+app.get('/', (request, response) => { response.status(200).send({ message: 'Welcome ! You\'re on the home page.' }) })
+
 app.get('/api', getEndpoints);
 
 app.get('/api/categories', getCategories);
