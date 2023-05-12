@@ -128,6 +128,98 @@ describe('/api/reviews', () => {
                     });
             });
         });
+        describe('PATCH request', () => {
+            test('status 200 - accept request of object with property: inc_votes (positive); respond with updated review object', () => {
+                return request(app)
+                    .patch('/api/reviews/12')
+                    .send({ inc_votes: 25 })
+                    .expect(200)
+                    .then((response) => {
+                        const { review } = response.body;
+                        expect(review.review_id).toBe(12);
+                        expect(review.title).toBe('Scythe; you\'re gonna need a bigger table!');
+                        expect(review.category).toBe('social deduction');
+                        expect(review.designer).toBe('Jamey Stegmaier');
+                        expect(review.owner).toBe('mallionaire');
+                        expect(review.review_body).toBe('Spend 30 minutes just setting up all of the boards (!) meeple and decks, just to forget how to play. Scythe can be a lengthy game but really packs a punch if you put the time in. With beautiful artwork, countless scenarios and clever game mechanics, this board game is a must for any board game fanatic; just make sure you explain ALL the rules before you start playing with first timers or you may find they bring it up again and again.');
+                        expect(review.review_img_url).toBe('https://images.pexels.com/photos/4200740/pexels-photo-4200740.jpeg?w=700&h=700');
+                        expect(review.created_at).toBe('2021-01-22T10:37:04.839Z');
+                        expect(review.votes).toBe(125);
+                    });
+            });
+            test('status 200 - accept request of object with property: inc_votes (negative); respond with updated review object', () => {
+                return request(app)
+                    .patch('/api/reviews/12')
+                    .send({ inc_votes: -1 })
+                    .expect(200)
+                    .then((response) => {
+                        const { review } = response.body;
+                        expect(review.review_id).toBe(12);
+                        expect(review.title).toBe('Scythe; you\'re gonna need a bigger table!');
+                        expect(review.category).toBe('social deduction');
+                        expect(review.designer).toBe('Jamey Stegmaier');
+                        expect(review.owner).toBe('mallionaire');
+                        expect(review.review_body).toBe('Spend 30 minutes just setting up all of the boards (!) meeple and decks, just to forget how to play. Scythe can be a lengthy game but really packs a punch if you put the time in. With beautiful artwork, countless scenarios and clever game mechanics, this board game is a must for any board game fanatic; just make sure you explain ALL the rules before you start playing with first timers or you may find they bring it up again and again.');
+                        expect(review.review_img_url).toBe('https://images.pexels.com/photos/4200740/pexels-photo-4200740.jpeg?w=700&h=700');
+                        expect(review.created_at).toBe('2021-01-22T10:37:04.839Z');
+                        expect(review.votes).toBe(99);
+                    });
+            });
+            test('status 200 - ignore extra properties given in request body', () => {
+                return request(app)
+                    .patch('/api/reviews/12')
+                    .send({ inc_votes: 25, something_irrelevant: 0 })
+                    .expect(200)
+                    .then((response) => {
+                        const { review } = response.body;
+                        expect(review.review_id).toBe(12);
+                        expect(review.title).toBe('Scythe; you\'re gonna need a bigger table!');
+                        expect(review.category).toBe('social deduction');
+                        expect(review.designer).toBe('Jamey Stegmaier');
+                        expect(review.owner).toBe('mallionaire');
+                        expect(review.review_body).toBe('Spend 30 minutes just setting up all of the boards (!) meeple and decks, just to forget how to play. Scythe can be a lengthy game but really packs a punch if you put the time in. With beautiful artwork, countless scenarios and clever game mechanics, this board game is a must for any board game fanatic; just make sure you explain ALL the rules before you start playing with first timers or you may find they bring it up again and again.');
+                        expect(review.review_img_url).toBe('https://images.pexels.com/photos/4200740/pexels-photo-4200740.jpeg?w=700&h=700');
+                        expect(review.created_at).toBe('2021-01-22T10:37:04.839Z');
+                        expect(review.votes).toBe(125);
+                    });
+            });
+            test('status 404 - review id does not exist in the database', () => {
+                return request(app)
+                    .patch('/api/reviews/15')
+                    .send({ inc_votes: 1 })
+                    .expect(404)
+                    .then((response) => {
+                        expect(response.body.message).toBe('Error 404: Not found.');
+                    });
+            });
+            test('status 400 - review id is not a number', () => {
+                return request(app)
+                    .patch('/api/reviews/five')
+                    .send({ inc_votes: 1 })
+                    .expect(400)
+                    .then((response) => {
+                        expect(response.body.message).toBe('Error 400: Bad request.');
+                    });
+            });
+            test('status 400 - request body object is missing property inc_votes', () => {
+                return request(app)
+                    .patch('/api/reviews/12')
+                    .send({ dont_inc_votes: 25 })
+                    .expect(400)
+                    .then((response) => {
+                        expect(response.body.message).toBe('Error 400: Bad request.');
+                    });
+            });
+            test('status 400 - request body object fails PSQL schema validation', () => {
+                return request(app)
+                    .patch('/api/reviews/12')
+                    .send({ inc_votes: 'twenty-five' })
+                    .expect(400)
+                    .then((response) => {
+                        expect(response.body.message).toBe('Error 400: Bad request.');
+                    });
+            });
+        });
         describe('/comments', () => {
             describe('GET request', () => {
                 test('status 200 - respond with array of comments with the following properties sorted by date in descending order: comment_id, votes, created_at, author, body, review_id', () => {

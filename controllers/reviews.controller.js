@@ -1,4 +1,4 @@
-const { fetchReviewsById, fetchReviews } = require("../models/reviews.model.js");
+const { fetchReviewsById, fetchReviews, updateReviewsById } = require("../models/reviews.model.js");
 const { fetchCommentsByReviewId, insertCommentsByReviewId } = require("../models/comments.model.js");
 
 exports.getReviewsById = (request, response, next) => {
@@ -42,4 +42,16 @@ exports.postCommentsByReviewId = (request, response, next) => {
         .catch((error) => {
             next(error);
         });
+}
+
+exports.patchReviewsByReviewId = (request, response, next) => {
+    const { inc_votes } = request.body;
+    const { review_id } = request.params;
+    updateReviewsById(review_id, inc_votes)
+        .then((result) => {
+            response.status(200).send({ review: result });
+        })
+        .catch((error) => {
+            next(error);
+        })
 }
