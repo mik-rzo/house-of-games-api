@@ -425,6 +425,95 @@ describe('/api/comments/:comment_id', () => {
                 });
         });
     });
+    describe('PATCH request', () => {
+        test('status 200 - accept request of object with property: inc_votes (positive); respond with updated comment object', () => {
+            return request(app)
+                .patch('/api/comments/5')
+                .send({ inc_votes: 1 })
+                .expect(200)
+                .then((response) => {
+                    const { comment } = response.body;
+                    expect(comment).toMatchObject({
+                        comment_id: 5,
+                        body: 'Now this is a story all about how, board games turned my life upside down',
+                        review_id: 2,
+                        author: 'mallionaire',
+                        votes: 14,
+                        created_at: '2021-01-18T10:24:05.410Z'
+                    });
+                });
+        });
+        test('status 200 - accept request of object with property: inc_votes (negative); respond with updated comment object', () => {
+            return request(app)
+                .patch('/api/comments/3')
+                .send({ inc_votes: -1 })
+                .expect(200)
+                .then((response) => {
+                    const { comment } = response.body;
+                    expect(comment).toMatchObject({
+                        comment_id: 3,
+                        body: 'I didn\'t know dogs could play games',
+                        review_id: 3,
+                        author: 'philippaclaire9',
+                        votes: 9,
+                        created_at: '2021-01-18T10:09:48.110Z'
+                    });
+                });
+        });
+        test('status 200 - ignore extra properties given in request body', () => {
+            return request(app)
+                .patch('/api/comments/5')
+                .send({ inc_votes: 1, something_irrelevant: 'null' })
+                .expect(200)
+                .then((response) => {
+                    const { comment } = response.body;
+                    expect(comment).toMatchObject({
+                        comment_id: 5,
+                        body: 'Now this is a story all about how, board games turned my life upside down',
+                        review_id: 2,
+                        author: 'mallionaire',
+                        votes: 14,
+                        created_at: '2021-01-18T10:24:05.410Z'
+                    });
+                });
+        });
+        test('status 404 - comment id does not exist', () => {
+            return request(app)
+                .patch('/api/comments/7')
+                .send({ inc_votes: 1 })
+                .expect(404)
+                .then((response) => {
+                    expect(response.body.message).toBe('Error 404: Not found.');
+                });
+        });
+        test('status 400 - comment id is not a number', () => {
+            return request(app)
+                .patch('/api/comments/five')
+                .send({ inc_votes: 1 })
+                .expect(400)
+                .then((response) => {
+                    expect(response.body.message).toBe('Error 400: Bad request.');
+                });
+        });
+        test('status 400 - request object missing inc_votes property', () => {
+            return request(app)
+                .patch('/api/comments/5')
+                .send({ increment_votes: 1 })
+                .expect(400)
+                .then((response) => {
+                    expect(response.body.message).toBe('Error 400: Bad request.');
+                });
+        });
+        test('status 400 - value of inc_votes is not a number', () => {
+            return request(app)
+                .patch('/api/comments/5')
+                .send({ inc_votes: 'one' })
+                .expect(400)
+                .then((response) => {
+                    expect(response.body.message).toBe('Error 400: Bad request.');
+                });
+        });
+    });
 });
 
 describe('/api/users', () => {

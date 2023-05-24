@@ -130,5 +130,20 @@
         "avatar_url": "https://www.healthytherapies.com/wp-content/uploads/2016/06/Lime3.jpg"
       }
     }
+  },
+  "PATCH /api/comments/:comment_id": {
+    "description": "accepts an object containing a number to increment/decerement votes and updates the comment matching comment id",
+    "queries": [],
+    "exampleRequest": {
+      "inc_votes": 10
+    },
+    "exampleResponse": {
+      "comment_id": 5,
+      "body": "Now this is a story all about how, board games turned my life upside down",
+      "review_id": 2,
+      "author": "mallionaire",
+      "votes": 23,
+      "created_at": "2021-01-18T10:24:05.410Z"
+    }
   }
 }
