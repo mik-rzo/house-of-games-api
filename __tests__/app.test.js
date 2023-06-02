@@ -117,6 +117,28 @@ describe('/api/reviews', () => {
                     expect(reviews).toBeSortedBy('designer', { descending: false });
                 });
         });
+        test('status 200 - accept sort by query for comment count', () => {
+            return request(app)
+                .get('/api/reviews?sort_by=comment_count&order=desc')
+                .expect(200)
+                .then((response) => {
+                    const { reviews } = response.body;
+                    expect(reviews).toBeSortedBy('comment_count', { descending: true });
+                });
+        });
+        test('status 200 - accept category, sort by and order query', () => {
+            return request(app)
+                .get(`/api/reviews?category=social%20deduction&sort_by=votes&order=desc`)
+                .expect(200)
+                .then((response) => {
+                    const { reviews } = response.body;
+                    expect(reviews.length).toBe(11);
+                    reviews.forEach((review) => {
+                        expect(review.category).toBe('social deduction');
+                    });
+                    expect(reviews).toBeSortedBy('votes', { descending: true });
+                });
+        });
         test('status 404 - misspelled endpoint', () => {
             return request(app)
                 .get('/api/review')

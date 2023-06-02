@@ -29,7 +29,7 @@ exports.fetchReviews = (userQuery = { sort_by: 'created_at', order: 'desc' }) =>
     `
     if (category) {
         queryStr += `WHERE category = %L
-        `
+    `
     }
     queryStr += `GROUP BY reviews.review_id
     `
@@ -40,7 +40,11 @@ exports.fetchReviews = (userQuery = { sort_by: 'created_at', order: 'desc' }) =>
         order = 'desc';
     }
     order = order.toUpperCase();
-    queryStr += `ORDER BY reviews.%I %s;`
+    if (sort_by !== 'comment_count') {
+        queryStr += `ORDER BY reviews.%I %s;`
+    } else if (sort_by === 'comment_count') {
+        queryStr += `ORDER BY %s %s;`
+    }
     if (category) {
         queryStr = format(queryStr, category, sort_by, order);
     } else {
