@@ -18,12 +18,12 @@ afterAll(() => {
 
 describe('/', () => {
     describe('GET request', () => {
-        test('status 200 - respond with message indicating the user is on the home page', () => {
+        test('status 200 - respond with message telling the user to go to /api to see available endpoints', () => {
             return request(app)
                 .get('/')
                 .expect(200)
                 .then((response) => {
-                    expect(response.body.message).toEqual('Welcome ! You\'re on the home page.');
+                    expect(response.body.message).toEqual('Welcome ! Go to /api to see all available endpoints.');
                 });
         });
     });

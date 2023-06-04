@@ -6,7 +6,7 @@ const commentsRouter = require('./comments.route.js');
 const reviewsRouter = require('./reviews.route.js');
 const usersRouter = require('./users.route.js');
 
-router.get('/', (request, response) => { response.status(200).send({ message: 'Welcome ! You\'re on the home page.' }) })
+router.get('/', (request, response) => { response.status(200).send({ message: 'Welcome ! Go to /api to see all available endpoints.' }) })
 
 router.get('/api', getEndpoints);
 
