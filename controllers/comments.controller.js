@@ -1,8 +1,8 @@
-const { deleteRowCommentsByCommentId, fetchCommentsByCommentId, updateCommentsById } = require("../models/comments.model.js")
+const { deleteRowCommentByCommentId, fetchCommentsByCommentId, updateCommentById } = require("../models/comments.model.js")
 
-exports.deleteCommentsByCommentId = (request, response, next) => {
+exports.deleteCommentByCommentId = (request, response, next) => {
     const { comment_id } = request.params
-    deleteRowCommentsByCommentId(comment_id)
+    deleteRowCommentByCommentId(comment_id)
         .then(() => {
             response.status(204).send();
         })
@@ -22,10 +22,10 @@ exports.getCommentsByCommentId = (request, response, next) => {
         })
 }
 
-exports.patchCommentsByCommentId = (request, response, next) => {
+exports.patchCommentByCommentId = (request, response, next) => {
     const { inc_votes } = request.body;
     const { comment_id } = request.params;
-    updateCommentsById(comment_id, inc_votes)
+    updateCommentById(comment_id, inc_votes)
         .then((result) => {
             response.status(200).send({ comment: result });
         })

@@ -1,9 +1,9 @@
-const { fetchReviewsById, fetchReviews, updateReviewsById, insertReview } = require("../models/reviews.model.js");
+const { fetchReviewById, fetchReviews, updateReviewById, insertReview } = require("../models/reviews.model.js");
 const { fetchCommentsByReviewId, insertCommentByReviewId } = require("../models/comments.model.js");
 
-exports.getReviewsById = (request, response, next) => {
+exports.getReviewById = (request, response, next) => {
     const { review_id } = request.params;
-    fetchReviewsById(review_id)
+    fetchReviewById(review_id)
         .then((result) => {
             response.status(200).send({ review: result });
         })
@@ -47,10 +47,10 @@ exports.postCommentByReviewId = (request, response, next) => {
         })
 }
 
-exports.patchReviewsByReviewId = (request, response, next) => {
+exports.patchReviewByReviewId = (request, response, next) => {
     const { inc_votes } = request.body;
     const { review_id } = request.params;
-    updateReviewsById(review_id, inc_votes)
+    updateReviewById(review_id, inc_votes)
         .then((result) => {
             response.status(200).send({ review: result });
         })
@@ -62,7 +62,7 @@ exports.patchReviewsByReviewId = (request, response, next) => {
 exports.postReview = (request, response, next) => {
     insertReview(request.body)
         .then((result) => {
-            return fetchReviewsById(result)
+            return fetchReviewById(result)
         })
         .then((result) => {
             response.status(201).send({ review: result });
