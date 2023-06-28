@@ -8,7 +8,7 @@ exports.deleteCommentsByCommentId = (request, response, next) => {
         })
         .catch((error) => {
             next(error);
-        });
+        })
 }
 
 exports.getCommentsByCommentId = (request, response, next) => {

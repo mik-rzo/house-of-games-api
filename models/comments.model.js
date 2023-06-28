@@ -17,7 +17,7 @@ exports.fetchCommentsByReviewId = (review_id) => {
         })
 }
 
-exports.insertCommentsByReviewId = (review_id, post) => {
+exports.insertCommentByReviewId = (review_id, post) => {
     if (!post.username || !post.body) {
         return Promise.reject({ status: 400, message: 'Error 400: Bad request.' })
     }
