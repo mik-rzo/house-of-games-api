@@ -34,7 +34,11 @@
   },
   "GET /api/reviews": {
     "description": "serves an array of all reviews",
-    "queries": ["category", "sort_by", "order"],
+    "queries": [
+      "category",
+      "sort_by",
+      "order"
+    ],
     "exampleResponse": {
       "reviews": [
         {
@@ -144,6 +148,32 @@
       "author": "mallionaire",
       "votes": 23,
       "created_at": "2021-01-18T10:24:05.410Z"
+    }
+  },
+  "POST /api/reviews": {
+    "description": "accepts a review object and adds the review to the database",
+    "queries": [],
+    "exampleRequest": {
+      "owner": "mallionaire",
+      "title": "A game of cards and bluffs (but not the game called Bullshit)",
+      "review_body": "Start off with two hidden roles and aim to eliminate other players. You can lie about your role at any time and in turn other players can call you out on that lie too. Use your roles (which can be a bluff or not) to make enemies and temporary allies.",
+      "designer": "Rikki Tahta",
+      "category": "social deduction",
+      "review_img_url": "https://miro.medium.com/v2/resize:fit:700/format:webp/0*tj9LN7WX50fRB2uX.jpg"
+    },
+    "exampleResponse": {
+      "review": {
+        "review_id": 14,
+        "title": "A game of cards and bluffs (but not the game called Bullshit)",
+        "category": "social deduction",
+        "designer": "Rikki Tahta",
+        "owner": "mallionaire",
+        "review_body": "Start off with two hidden roles and aim to eliminate other players. You can lie about your role at any time and in turn other players can call you out on that lie too. Use your roles (which can be a bluff or not) to make enemies and temporary allies.",
+        "review_img_url": "https://miro.medium.com/v2/resize:fit:700/format:webp/0*tj9LN7WX50fRB2uX.jpg",
+        "created_at": "2023-06-28T12:57:52.048Z",
+        "votes": 0,
+        "comment_count": 0
+      }
     }
   }
 }

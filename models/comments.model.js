@@ -1,6 +1,6 @@
 const db = require('../db/connection.js');
 
-const { fetchReviewsById } = require('./reviews.model.js');
+const { fetchReviewById } = require('./reviews.model.js');
 
 exports.fetchCommentsByReviewId = (review_id) => {
     const query = `
@@ -8,7 +8,7 @@ exports.fetchCommentsByReviewId = (review_id) => {
     WHERE review_id = $1
     ORDER BY created_at DESC;
     `
-    return fetchReviewsById(review_id) // check if review matching review id exists
+    return fetchReviewById(review_id) // check if review matching review id exists
         .then(() => {
             return db.query(query, [review_id])
         })
@@ -17,7 +17,7 @@ exports.fetchCommentsByReviewId = (review_id) => {
         })
 }
 
-exports.insertCommentsByReviewId = (review_id, post) => {
+exports.insertCommentByReviewId = (review_id, post) => {
     if (!post.username || !post.body) {
         return Promise.reject({ status: 400, message: 'Error 400: Bad request.' })
     }
@@ -34,13 +34,12 @@ exports.insertCommentsByReviewId = (review_id, post) => {
         })
 }
 
-exports.deleteRowCommentsByCommentId = (comment_id) => {
+exports.deleteRowCommentByCommentId = (comment_id) => {
     const query = `
     DELETE FROM comments
     WHERE comment_id = $1;
     `
-    const { fetchCommentsByCommentId } = module.exports; // return this.fetchCommentsByCommentId (alternative syntax)
-    return fetchCommentsByCommentId(comment_id)          //
+    return this.fetchCommentsByCommentId(comment_id)
         .then(() => {
             return db.query(query, [comment_id])
         })
@@ -63,7 +62,7 @@ exports.fetchCommentsByCommentId = (comment_id) => {
         })
 }
 
-exports.updateCommentsById = (comment_id, inc_votes) => {
+exports.updateCommentById = (comment_id, inc_votes) => {
     if (!inc_votes) {
         return Promise.reject({ status: 400, message: 'Error 400: Bad request.' });
     }

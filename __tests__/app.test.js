@@ -13,7 +13,7 @@ beforeEach(() => {
 });
 
 afterAll(() => {
-    return db.end();
+    return seed(testData).then(() => { return db.end() });
 });
 
 describe('/', () => {
@@ -146,6 +146,145 @@ describe('/api/reviews', () => {
                 .then((response) => {
                     expect(response.body.message).toBe('Error 404: Not found.')
                 })
+        });
+    });
+    describe('POST request', () => {
+        test('status 201 - accept request of review object with properties: owner, title, review_body, designer, category, review_img_url; respond with posted review object with additional properties: review_id, votes, created_at, comment_count', () => {
+            const review = {
+                owner: 'mallionaire',
+                title: "A game of cards and bluffs (but not the game called Bullshit)",
+                review_body: "Start off with two hidden roles and aim to eliminate other players. You can lie about your role at any time and in turn other players can call you out on that lie too. Use your roles (which can be a bluff or not) to make enemies and temporary allies.",
+                designer: 'Rikki Tahta',
+                category: 'social deduction',
+                review_img_url: 'https://miro.medium.com/v2/resize:fit:700/format:webp/0*tj9LN7WX50fRB2uX.jpg'
+            };
+            return request(app)
+                .post('/api/reviews')
+                .send(review)
+                .expect(201)
+                .then((response) => {
+                    const { review } = response.body;
+                    expect(review).toEqual({
+                        owner: 'mallionaire',
+                        title: "A game of cards and bluffs (but not the game called Bullshit)",
+                        review_body: "Start off with two hidden roles and aim to eliminate other players. You can lie about your role at any time and in turn other players can call you out on that lie too. Use your roles (which can be a bluff or not) to make enemies and temporary allies.",
+                        designer: 'Rikki Tahta',
+                        category: 'social deduction',
+                        review_img_url: 'https://miro.medium.com/v2/resize:fit:700/format:webp/0*tj9LN7WX50fRB2uX.jpg',
+                        review_id: expect.any(Number),
+                        votes: 0,
+                        created_at: expect.any(String),
+                        comment_count: 0
+                    });
+                });
+        });
+        test('status 201 - accept request of review object missing review_img_url property; respond with posted review object with placeholder in review_img_url property', () => {
+            const review = {
+                owner: 'mallionaire',
+                title: "A game of cards and bluffs (but not the game called Bullshit)",
+                review_body: "Start off with two hidden roles and aim to eliminate other players. You can lie about your role at any time and in turn other players can call you out on that lie too. Use your roles (which can be a bluff or not) to make enemies and temporary allies.",
+                designer: 'Rikki Tahta',
+                category: 'social deduction',
+            };
+            return request(app)
+                .post('/api/reviews')
+                .send(review)
+                .expect(201)
+                .then((response) => {
+                    const { review } = response.body;
+                    expect(review).toEqual({
+                        owner: 'mallionaire',
+                        title: "A game of cards and bluffs (but not the game called Bullshit)",
+                        review_body: "Start off with two hidden roles and aim to eliminate other players. You can lie about your role at any time and in turn other players can call you out on that lie too. Use your roles (which can be a bluff or not) to make enemies and temporary allies.",
+                        designer: 'Rikki Tahta',
+                        category: 'social deduction',
+                        review_img_url: 'https://images.pexels.com/photos/163064/play-stone-network-networked-interactive-163064.jpeg?w=700&h=700',
+                        review_id: expect.any(Number),
+                        votes: 0,
+                        created_at: expect.any(String),
+                        comment_count: 0
+                    });
+                });
+        });
+        test('status 201 - ignore extra properties given in request body', () => {
+            const review = {
+                owner: 'mallionaire',
+                title: "A game of cards and bluffs (but not the game called Bullshit)",
+                review_body: "Start off with two hidden roles and aim to eliminate other players. You can lie about your role at any time and in turn other players can call you out on that lie too. Use your roles (which can be a bluff or not) to make enemies and temporary allies.",
+                designer: 'Rikki Tahta',
+                category: 'social deduction',
+                review_img_url: 'https://miro.medium.com/v2/resize:fit:700/format:webp/0*tj9LN7WX50fRB2uX.jpg',
+                something_irrelevant: '!?!?!?!?!?!?!?!?!?!'
+            };
+            return request(app)
+                .post('/api/reviews')
+                .send(review)
+                .expect(201)
+                .then((response) => {
+                    const { review } = response.body;
+                    expect(review).toEqual({
+                        owner: 'mallionaire',
+                        title: "A game of cards and bluffs (but not the game called Bullshit)",
+                        review_body: "Start off with two hidden roles and aim to eliminate other players. You can lie about your role at any time and in turn other players can call you out on that lie too. Use your roles (which can be a bluff or not) to make enemies and temporary allies.",
+                        designer: 'Rikki Tahta',
+                        category: 'social deduction',
+                        review_img_url: 'https://miro.medium.com/v2/resize:fit:700/format:webp/0*tj9LN7WX50fRB2uX.jpg',
+                        review_id: expect.any(Number),
+                        votes: 0,
+                        created_at: expect.any(String),
+                        comment_count: 0
+                    });
+                });
+        });
+        test('status 400 - missing required properties', () => {
+            const review = {
+                owner: 'mallionaire',
+                title: "A game of cards and bluffs (but not the game called Bullshit)",
+                designer: 'Rikki Tahta',
+                category: 'social deduction',
+                review_img_url: 'https://miro.medium.com/v2/resize:fit:700/format:webp/0*tj9LN7WX50fRB2uX.jpg'
+            };
+            return request(app)
+                .post('/api/reviews')
+                .send(review)
+                .expect(400)
+                .then((response) => {
+                    expect(response.body.message).toBe('Error 400: Bad request.');
+                });
+        });
+        test('status 404 - owner is not an existing user', () => {
+            const review = {
+                owner: 'maxxthehusky',
+                title: "A game of cards and bluffs (but not the game called Bullshit)",
+                review_body: "Start off with two hidden roles and aim to eliminate other players. You can lie about your role at any time and in turn other players can call you out on that lie too. Use your roles (which can be a bluff or not) to make enemies and temporary allies.",
+                designer: 'Rikki Tahta',
+                category: 'social deduction',
+                review_img_url: 'https://miro.medium.com/v2/resize:fit:700/format:webp/0*tj9LN7WX50fRB2uX.jpg'
+            };
+            return request(app)
+                .post('/api/reviews')
+                .send(review)
+                .expect(404)
+                .then((response) => {
+                    expect(response.body.message).toBe('Error 404: Not found.');
+                });
+        });
+        test('status 404 - category given does not exist in categories table', () => {
+            const review = {
+                owner: 'mallionaire',
+                title: "A game of cards and bluffs (but not the game called Bullshit)",
+                review_body: "Start off with two hidden roles and aim to eliminate other players. You can lie about your role at any time and in turn other players can call you out on that lie too. Use your roles (which can be a bluff or not) to make enemies and temporary allies.",
+                designer: 'Rikki Tahta',
+                category: 'strategy',
+                review_img_url: 'https://miro.medium.com/v2/resize:fit:700/format:webp/0*tj9LN7WX50fRB2uX.jpg'
+            };
+            return request(app)
+                .post('/api/reviews')
+                .send(review)
+                .expect(404)
+                .then((response) => {
+                    expect(response.body.message).toBe('Error 404: Not found.');
+                });
         });
     });
     describe('/:review_id', () => {

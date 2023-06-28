@@ -2,7 +2,7 @@ const db = require('../db/connection.js');
 
 const format = require('pg-format');
 
-exports.fetchReviewsById = (review_id) => {
+exports.fetchReviewById = (review_id) => {
     const query = `
     SELECT reviews.*, COUNT(comments.*) AS comment_count
     FROM reviews LEFT JOIN comments
@@ -65,8 +65,7 @@ exports.fetchCommentsByReviewId = (review_id) => {
     WHERE review_id = $1
     ORDER BY created_at DESC;
     `
-    const { fetchReviewsById } = module.exports;
-    return fetchReviewsById(review_id) // check if review matching review id exists
+    return this.fetchReviewById(review_id) // check if review matching review id exists
         .then(() => {
             return db.query(query, [review_id])
         })
@@ -75,7 +74,7 @@ exports.fetchCommentsByReviewId = (review_id) => {
         })
 }
 
-exports.updateReviewsById = (review_id, inc_votes) => {
+exports.updateReviewById = (review_id, inc_votes) => {
     if (!inc_votes) {
         return Promise.reject({ status: 400, message: 'Error 400: Bad request.' });
     }
@@ -85,8 +84,7 @@ exports.updateReviewsById = (review_id, inc_votes) => {
     WHERE review_id = $2
     RETURNING *;
     `
-    const { fetchReviewsById } = module.exports;
-    return fetchReviewsById(review_id)
+    return this.fetchReviewById(review_id)
         .then(() => {
             return db.query(query, [inc_votes, review_id])
         })
@@ -95,4 +93,40 @@ exports.updateReviewsById = (review_id, inc_votes) => {
         })
 }
 
+exports.insertReview = (post) => {
+    if (!post.owner || !post.title || !post.review_body || !post.designer || !post.category) {
+        return Promise.reject({ status: 400, message: 'Error 400: Bad request.' })
+    }
 
+    let query = `
+    INSERT INTO reviews
+    `
+    if (post.review_img_url) {
+        query += `(owner, title, review_body, designer, category, review_img_url)
+    `
+    } else {
+        query += `(owner, title, review_body, designer, category)
+    `
+    }
+    query += `VALUES
+    `
+    if (post.review_img_url) {
+        query += `($1, $2, $3, $4, $5, $6)
+    `
+    } else {
+        query += `($1, $2, $3, $4, $5)
+    `
+    }
+    query += `RETURNING review_id;
+    `
+    let dbQuery;
+    if (post.review_img_url) {
+        dbQuery = db.query(query, [post.owner, post.title, post.review_body, post.designer, post.category, post.review_img_url])
+    } else {
+        dbQuery = db.query(query, [post.owner, post.title, post.review_body, post.designer, post.category])
+    }
+    return dbQuery
+        .then((result) => {
+            return result.rows[0].review_id
+        })
+}
