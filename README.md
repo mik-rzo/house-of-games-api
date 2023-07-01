@@ -2,7 +2,9 @@
 
 ## Background
 
-This is an API built for the purpose of accessing application data programatically and will provide information to the front-end architecture of this full-stack application. The data is comprised of: users, board game categories, board game reviews from users, and comments left on reviews by other users. The data is stored in a PostgreSQL database and is accessed programmatically using  [node-postgres](https://node-postgres.com/).
+This is an API built for the purpose of accessing application data programatically and provides information to the front-end architecture of this full-stack application. 
+
+The data is comprised of: users, board game categories, board game reviews from users, and comments left on reviews by other users. The data is stored in a PostgreSQL database and is accessed programmatically using  [node-postgres](https://node-postgres.com/).
 
 ## Links
 
