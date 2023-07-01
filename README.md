@@ -1,30 +1,31 @@
 # House of Games API
 
-## Introduction
+## Background
 
-This is an API for accessing data on board game reviews. The data is comprised of: users, board game categories, board game reviews from users, and comments left on reviews by other users.
+This is an API built for the purpose of accessing application data programatically and will provide information to the front-end architecture of this full-stack application. The data is comprised of: users, board game categories, board game reviews from users, and comments left on reviews by other users. The data is stored in a PostgreSQL database and is accessed programmatically using  [node-postgres](https://node-postgres.com/).
 
-You can access the site where the API lives on [here](https://house-of-games-7nlp.onrender.com/).
+## Links
 
-## Getting started
+View the list of all currently available endpoints here: [https://house-of-games-7nlp.onrender.com/api](https://house-of-games-7nlp.onrender.com/api).
 
-First, clone the repo from GitHub. You can use this command in your terminal to do so:
+Take a look at the front-end repo for this application here: [https://github.com/mik-rzo/house-of-games](https://github.com/mik-rzo/house-of-games).
 
-```
-$ git clone https://github.com/mik-rzo/house-of-games.git
-```
+## Project Setup
 
-Install the required dependencies using the following command:
+Fork the repo to get your own copy and clone it to your local system.
+
+In the root of the project directory, install the required dependencies using the following command:
 
 ```
 $ npm install
 ```
 
-## Setting up for development and testing
-
 **You must have Node.js and PostgreSQL installed.**
 
-**Node.js minimum version: v20.0.0 | PostgreSQL minimum version: v14.7** 
+**Minimum version requirements:**
+
+* Node.js: v20.0.0
+* PostgreSQL: v14.7
 
 There are two databases for this API: one with development data and one with a smaller set of test data. You will need to create these databases locally on your computer by running the following script:
 
@@ -42,7 +43,7 @@ You can then use this script to populate (or re-seed) the **development** databa
 $ npm run seed
 ```
 
-Jest is used as our testing framework. When running the test files with jest, `NODE_ENV` is set to `test` and the application runs using the environment variables in `.env.test`. Before each test runs, the **test** database is re-seeded. You can run jest using the script:
+Jest is used as our testing framework. When running the test files with jest, `NODE_ENV` is set to `test` and the application runs using the environment variables in `.env.test`. Before each test runs (and also after all tests), the **test** database is re-seeded. You can run jest using the script:
 
 ```
 $ npm test
