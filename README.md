@@ -19,7 +19,7 @@ Fork the repo to get your own copy and clone it to your local system.
 In the root of the project directory, install the required dependencies using the following command:
 
 ```
-$ npm install
+npm install
 ```
 
 **You must have Node.js and PostgreSQL installed.**
@@ -32,7 +32,7 @@ $ npm install
 There are two databases for this API: one with development data and one with a smaller set of test data. You will need to create these databases locally on your computer by running the following script:
 
 ```
-$ npm run setup-dbs
+npm run setup-dbs
 ```
 
 Then, in order to connect to the database, you will need to create your environment variables in `.env` files.
@@ -42,11 +42,11 @@ Then, in order to connect to the database, you will need to create your environm
 You can then use this script to populate (or re-seed) the **development** database:
 
 ```
-$ npm run seed
+npm run seed
 ```
 
 Jest is used as our testing framework. When running the test files with jest, `NODE_ENV` is set to `test` and the application runs using the environment variables in `.env.test`. Before each test runs (and also after all tests), the **test** database is re-seeded. You can run jest using the script:
 
 ```
-$ npm test
+npm test
 ```
