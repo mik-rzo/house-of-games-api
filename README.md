@@ -14,6 +14,13 @@ Take a look at the front-end repo for this application here: [https://github.com
 
 ## Project Setup
 
+**You must have Node.js and PostgreSQL installed.**
+
+**Minimum version requirements:**
+
+- Node.js: v20.0.0
+- PostgreSQL: v14.7
+
 Fork the repo to get your own copy and clone it to your local system.
 
 In the root of the project directory, install the required dependencies using the following command:
@@ -21,13 +28,6 @@ In the root of the project directory, install the required dependencies using th
 ```
 npm install
 ```
-
-**You must have Node.js and PostgreSQL installed.**
-
-**Minimum version requirements:**
-
-- Node.js: v20.0.0
-- PostgreSQL: v14.7
 
 There are two databases for this API: one with development data and one with a smaller set of test data. You will need to create these databases locally on your computer by running the following script:
 
