@@ -4,7 +4,7 @@ const routes = require('./routes/index.js');
 
 const app = express();
 
-app.use(cors());
+app.use(cors({ origin: 'https://house-of-games-mp.netlify.app' }));
 
 app.use(express.json());
 
